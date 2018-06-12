@@ -1,4 +1,4 @@
-from security_monkey.watcher import Watcher, ChangeItem
+from security_monkey.watcher import Watcher, ChangeItem, pool
 from security_monkey.decorators import record_exception
 from cloudaux.decorators import iter_account_region
 from security_monkey import AWS_DEFAULT_REGION
@@ -90,10 +90,10 @@ class CloudAuxWatcher(Watcher):
             if not item_list:
                 return results, exception_map
 
-            for item in item_list:
+            def slurp_item(item):
                 item_name = self.get_name_from_list_output(item)
                 if item_name and self.check_ignore_list(item_name):
-                    continue
+                    return None
 
                 item_details = invoke_get_method(item, name=item_name, **kwargs)
                 if item_details:
@@ -114,6 +114,12 @@ class CloudAuxWatcher(Watcher):
                         record_region=record_region,
                         source_watcher=self,
                         **kwargs)
+                    return item
+                else:
+                    return None
+
+            for item in pool.map(slurp_item, item_list):
+                if item:
                     results.append(item)
 
             return results, exception_map

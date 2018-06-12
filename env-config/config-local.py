@@ -220,3 +220,6 @@ HEADER_AUTH_GROUPS_HEADER=None
 
 # Log SSL Cert SubjectAltName errors
 LOG_SSL_SUBJ_ALT_NAME_ERRORS = True
+
+# Sets the number of threads used for slurping watcher items
+WATCHER_CONCURRENCY = os.getenv("WATCHER_CONCURRENCY")

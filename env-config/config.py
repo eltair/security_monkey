@@ -265,3 +265,6 @@ REPORTER_START_DELAY=10
 JIRA_SSL_VERIFY = True
 JIRA_OPEN = 'Open' # Opened ticket JIRA transition name (e.g. 'Open', 'To Do')
 JIRA_CLOSED = 'Closed' # Closed ticket JIRA transition name (e.g. 'Closed', 'Done')
+
+# Sets the number of threads used for slurping watcher items
+WATCHER_CONCURRENCY = os.getenv("WATCHER_CONCURRENCY")

@@ -17,6 +17,7 @@ from security_monkey.datastore import Technology, WatcherConfig, store_exception
     ItemRevision, Datastore
 from security_monkey.common.jinja import get_jinja_env
 from security_monkey.alerters.custom_alerter import report_watcher_changes
+from multiprocessing.dummy import Pool
 
 from boto.exception import BotoServerError
 import time
@@ -26,6 +27,9 @@ import dpath.util
 from dpath.exceptions import PathNotFound
 
 import logging
+
+
+pool = Pool(int(app.config.get("WATCHER_CONCURRENCY")))
 
 # TODO: Find a better way for the sake of less hair-pulling during unit testing so that this is not a global variable
 #       that constantly breaks!!
